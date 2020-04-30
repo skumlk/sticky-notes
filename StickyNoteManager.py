@@ -44,6 +44,7 @@ class StickyNoteManager:
 
     def showAll(self):
         for frame in self.stickyNotes:
+            frame.show()
             frame.activateWindow()     
 
     def updateNoteText(self, _id, text):
@@ -60,6 +61,11 @@ class StickyNoteManager:
 
     def deleteNote(self, _id):
         self.stickyNotes = [x for x in self.stickyNotes if x._id != _id]
-        ConfigParser.config_instance.deleteNote(_id)        
+        ConfigParser.config_instance.deleteNote(_id)       
+
+    def hideAll(self):
+        for frame in self.stickyNotes:
+            frame.hide()     
+
 
 sticky_note_manager_instance = None
