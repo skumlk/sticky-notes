@@ -8,19 +8,69 @@ import Const
 
 class StickyNoteEditor(QtWidgets.QTextEdit):
 
+    color_list = ["purple", "green", "pink", "yellow"]
+
     def __init__(self, parent=None):
         super().__init__(parent=parent)
         self.parent = parent
 
+    def isSelected(self):
+        cursor = self.textCursor()
+        return cursor.selectionEnd() - cursor.selectionStart()
+
     def contextMenuEvent(self, event):
+
         contextMenu = QMenu(self)
-        purpleAction = contextMenu.addAction(QtGui.QIcon('img/purple.png'), "Purple")
-        greenAction = contextMenu.addAction(QtGui.QIcon('img/green.png'), "Green")
-        yellowAction = contextMenu.addAction(QtGui.QIcon('img/yellow.png'), "Yellow")
-        pinkAction = contextMenu.addAction(QtGui.QIcon('img/pink.png'), "Pink")
+        isSelected = self.isSelected()
+
+        copyAction = contextMenu.addAction("Copy")
+        copyAction.triggered.connect(self.copy_action)
+
+        cutAction = contextMenu.addAction("Cut")
+        cutAction.triggered.connect(self.cut_action)
+
+        pasteAction = contextMenu.addAction("Paste")
+        pasteAction.triggered.connect(self.paste_action)
+
+        deleteAction = contextMenu.addAction("Delete")
+        deleteAction.triggered.connect(self.delete_action)
+
+        selectAllAction = contextMenu.addAction("Select All")
+        selectAllAction.triggered.connect(self.select_all_action)
+
+        if(not isSelected):
+            copyAction.setEnabled(False)
+            cutAction.setEnabled(False)
+            deleteAction.setEnabled(False)
+
+        if not self.canPaste():
+            pasteAction.setEnabled(False)
+       
+        contextMenu.addSeparator()
+
+        for color in self.color_list:
+            contextMenu.addAction(QtGui.QIcon('img/{0}.png'.format(color)), color.title())
+
         action = contextMenu.exec_(self.mapToGlobal(event.pos()))
         if action:
-            self.parent.setColor(action.text().lower())
+            color =  action.text().lower()
+            if color in self.color_list:
+                self.parent.setColor(color)
+
+    def copy_action(self):
+        self.copy()
+
+    def paste_action(self):
+        self.paste()
+
+    def delete_action(self):
+        pass
+
+    def select_all_action(self):
+        self.selectAll()
+
+    def cut_action(self):
+        self.cut()
 
 class StickyNote(QtWidgets.QFrame):
 
