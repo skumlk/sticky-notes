@@ -1,5 +1,6 @@
 import sys
 from PyQt5 import QtWidgets, QtGui
+from PyQt5.QtWidgets import QFrame
 from PyQt5 import QtCore
 from PyQt5.QtCore import Qt
 
@@ -51,12 +52,18 @@ class TitleBar(QtWidgets.QDialog):
             self.parent.offset = event.pos()
 
     def mouseMoveEvent(self,event):
-        if self.parent.moving: self.parent.move(event.globalPos()-self.parent.offset)
+        if self.parent.moving: 
+            newPosition = event.globalPos()-self.parent.offset
+            self.parent.move(newPosition)
+            self.parent.positionChanged(newPosition.x(), newPosition.y())
 
-
-class StickyFrame(QtWidgets.QFrame):
-    def __init__(self, parent=None):
+class StickyNote(QtWidgets.QFrame):
+    def __init__(self, _id, noteManager, parent=None):
+        
         QtWidgets.QFrame.__init__(self, parent)
+        
+        self._id = _id
+        self.noteManager = noteManager
         self.m_mouse_down= False
         self.setFrameShape(QtWidgets.QFrame.StyledPanel)
         css = """
@@ -82,16 +89,33 @@ class StickyFrame(QtWidgets.QFrame):
         layout.setSpacing(0)
         vbox.addLayout(layout)
 
+        l=QtWidgets.QVBoxLayout(self.contentWidget())
+        l.setContentsMargins(0, 0, 0, 0)
+        self.textEditor=QtWidgets.QTextEdit()
+        self.textEditor.setFrameStyle(QFrame.NoFrame)
+        l.addWidget(self.textEditor)
+
+        self.textEditor.textChanged.connect(self.textChanged)
+
     def contentWidget(self):
         return self.m_content
 
-    def mousePressEvent(self,event):
-        self.m_old_pos = event.pos()
-        self.m_mouse_down = event.button()== Qt.LeftButton
+    def setText(self, text):
+        self.textEditor.setText(text)
 
-    def mouseMoveEvent(self,event):
-        x=event.x()
-        y=event.y()
+    def setPosition(self, x, y):
+        self.move(x, y)
 
-    def mouseReleaseEvent(self,event):
-        m_mouse_down=False
+    def textChanged(self):
+        text = self.textEditor.toPlainText()
+        self.noteManager.updateNoteText(self._id, text)
+
+    def positionChanged(self, x,y):
+        self.noteManager.updateNotePosition(self._id, x, y)
+
+    def resizeEvent(self, resizeEvent):
+        newSize = self.size()
+        self.noteManager.updateNoteDimension(self._id, newSize.width(), newSize.height())
+
+    def setDimension(self, width, height):
+        self.resize(width, height)
