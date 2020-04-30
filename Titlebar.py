@@ -3,42 +3,18 @@ from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtWidgets import QFrame
 from PyQt5 import QtCore
 from PyQt5.QtCore import Qt
+import Const
 
 class TitleBar(QtWidgets.QDialog):
     def __init__(self, parent=None):
         QtWidgets.QDialog.__init__(self, parent)
         self.parent = parent
         self.setWindowFlags(Qt.FramelessWindowHint)
-        css = """
-        QWidget{
-            Background: #AA00AA;
-            color:white;
-            font:12px bold;
-            font-weight:bold;
-            border-radius: 1px;
-            height: 11px;
-        }
-        QDialog{
-            font-size:12px;
-            color: black;
-        }
-        QToolButton{
-            Background:#AA00AA;
-            font-size:11px;
-        }
-        QToolButton:hover{
-        }
-        """
+        
         self.setAutoFillBackground(True)
         self.setBackgroundRole(QtGui.QPalette.Highlight)
-        self.setStyleSheet(css)
+        self.updateCss()
         hbox=QtWidgets.QHBoxLayout(self)
-
-        btnClose=QtWidgets.QToolButton(self)
-        btnClose.setIcon(QtGui.QIcon('img/close.png'))
-        btnClose.setMinimumHeight(10)
-        btnClose.clicked.connect(self.close)
-        hbox.addWidget(btnClose)
 
         btnCreateNewNote=QtWidgets.QToolButton(self)
         btnCreateNewNote.setIcon(QtGui.QIcon('img/new.png'))
@@ -46,6 +22,11 @@ class TitleBar(QtWidgets.QDialog):
         btnCreateNewNote.clicked.connect(self.createNewNote)
         hbox.addWidget(btnCreateNewNote)
         
+        btnClose=QtWidgets.QToolButton(self)
+        btnClose.setIcon(QtGui.QIcon('img/close.png'))
+        btnClose.setMinimumHeight(10)
+        btnClose.clicked.connect(self.close)
+        hbox.addWidget(btnClose)
 
         hbox.insertStretch(1,500)
         hbox.setSpacing(0)
@@ -68,3 +49,30 @@ class TitleBar(QtWidgets.QDialog):
             newPosition = event.globalPos()-self.parent.offset
             self.parent.move(newPosition)
             self.parent.positionChanged(newPosition.x(), newPosition.y())
+    
+    def updateCss(self, backgroundColor=Const.TITLE_BACKGROUND_COLOR):
+        css = """
+            QWidget{{
+                Background: {0};
+                color:white;
+                font:12px bold;
+                font-weight:bold;
+                border-radius: 1px;
+                height: 11px;
+            }}
+            QDialog{{
+                font-size:12px;
+                color: black;
+            }}
+            QToolButton{{
+                Background: {0};
+                font-size:11px;
+            }}
+            QToolButton:hover{{
+            }}
+        """.format(backgroundColor)
+        self.setStyleSheet(css)
+
+
+    def updateTitleColor(self, color):
+        self.updateCss(color)

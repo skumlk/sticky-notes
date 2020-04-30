@@ -1,5 +1,22 @@
-{"notes": [
-    {"height": 250, "x": 119, "text": "This is test text ho ho", "id": "587", "y": 34, "color": "purple", "width": 250}, 
-    {"height": 250, "x": 119, "text": "Second text", "id": "444", "y": 34, "color": "purple", "width": 250}
+{
+    "notes":[
+       {
+          "text":"Sample Text 1",
+          "y":209,
+          "width":300,
+          "color":"yellow",
+          "height":250,
+          "x":1051,
+          "id":"5f219a68-f46e-4d8a-b7a6-220b4459d34c"
+       },
+       {
+          "text":"Sample Text 2",
+          "y":124,
+          "width":300,
+          "color":"green",
+          "height":250,
+          "x":934,
+          "id":"384e91f3-667b-4c68-95c4-17931615cd44"
+       }
     ]
-}
+ }

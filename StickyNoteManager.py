@@ -23,11 +23,23 @@ class StickyNoteManager:
         stickyNote.setPosition(note["x"], note["y"])
         stickyNote.setDimension(width, height)
         stickyNote.show()
+        stickyNote.setColor(note["color"])
         self.stickyNotes.append(stickyNote)
         return stickyNote
 
-    def createNewNote(self):
-        note = ConfigParser.config_instance.createNewNote(self.screenWidth - 300, 250)
+    def createNewNote(self, _id = None):
+
+        x = self.screenWidth - 300
+        y = 250
+        color = "purple"
+
+        if _id:
+            note = ConfigParser.config_instance.getNote(_id)
+            x = note["x"]
+            y = note["y"] + 100
+            color = note["color"]
+
+        note = ConfigParser.config_instance.createNewNote(x, y, color)
         self.createNote(note)
 
     def showAll(self):
@@ -42,6 +54,9 @@ class StickyNoteManager:
 
     def updateNoteDimension(self, _id,  width, height):
         ConfigParser.config_instance.updateNoteDimension(_id, width, height)
+
+    def updateNoteColor(self, _id, color):
+        ConfigParser.config_instance.updateNoteColor(_id, color)
 
     def deleteNote(self, _id):
         self.stickyNotes = [x for x in self.stickyNotes if x._id != _id]

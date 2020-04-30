@@ -1,11 +1,32 @@
 import sys
 from PyQt5 import QtWidgets, QtGui
-from PyQt5.QtWidgets import QFrame
+from PyQt5.QtWidgets import QFrame, QMenu
 from PyQt5 import QtCore
 from PyQt5.QtCore import Qt
 from Titlebar import TitleBar
+import Const
+
+class StickyNoteEditor(QtWidgets.QTextEdit):
+
+    def __init__(self, parent=None):
+        super().__init__(parent=parent)
+        self.parent = parent
+
+    def contextMenuEvent(self, event):
+        contextMenu = QMenu(self)
+        purpleAction = contextMenu.addAction(QtGui.QIcon('img/purple.png'), "Purple")
+        greenAction = contextMenu.addAction(QtGui.QIcon('img/green.png'), "Green")
+        yellowAction = contextMenu.addAction(QtGui.QIcon('img/yellow.png'), "Yellow")
+        pinkAction = contextMenu.addAction(QtGui.QIcon('img/pink.png'), "Pink")
+        action = contextMenu.exec_(self.mapToGlobal(event.pos()))
+        if action:
+            self.parent.setColor(action.text().lower())
 
 class StickyNote(QtWidgets.QFrame):
+
+    bodyColors = {"purple": "#D700D7", "green": "#D4FC7A","yellow": "#FFE46E","pink": "#FF7BE3" }
+    titleColors = {"purple": "#AA00AA", "green": "#BFFB33","yellow": "#FFDB3B","pink": "#FF48D8" }
+
     def __init__(self, _id, noteManager, parent=None):
         
         QtWidgets.QFrame.__init__(self, parent)
@@ -14,15 +35,8 @@ class StickyNote(QtWidgets.QFrame):
         self.noteManager = noteManager
         self.m_mouse_down= False
         self.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        css = """
-        QFrame{
-            Background:  #D700D7;
-            color:white;
-            font:13px ;
-            font-weight:bold;
-            }
-        """
-        self.setStyleSheet(css)
+       
+        self.updateStyleSheet()
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setMouseTracking(True)
         self.m_titleBar= TitleBar(self)
@@ -39,11 +53,10 @@ class StickyNote(QtWidgets.QFrame):
 
         l=QtWidgets.QVBoxLayout(self.contentWidget())
         l.setContentsMargins(0, 0, 0, 0)
-        self.textEditor=QtWidgets.QTextEdit()
+        self.textEditor=StickyNoteEditor(self)
         self.textEditor.setFrameStyle(QFrame.NoFrame)
         l.addWidget(self.textEditor)
-
-        self.textEditor.textChanged.connect(self.textChanged)
+        self.textEditor.textChanged.connect(self.signalTextChanged)
 
     def contentWidget(self):
         return self.m_content
@@ -54,7 +67,7 @@ class StickyNote(QtWidgets.QFrame):
     def setPosition(self, x, y):
         self.move(x, y)
 
-    def textChanged(self):
+    def signalTextChanged(self):
         text = self.textEditor.toPlainText()
         self.noteManager.updateNoteText(self._id, text)
 
@@ -73,4 +86,22 @@ class StickyNote(QtWidgets.QFrame):
         self.noteManager.deleteNote(self._id)
 
     def createNewNote(self):
-        self.noteManager.createNewNote()
+        self.noteManager.createNewNote(self._id)
+
+    def updateStyleSheet(self, backgroundColor = Const.BODY_BACKGROUND_COLOR):
+        css = """
+            QFrame{{
+                Background:  {0};
+                color:white;
+                font:13px ;
+                font-weight:bold;
+                }}
+            """.format(backgroundColor)
+        self.setStyleSheet(css)
+
+    def setColor(self, color):
+        bodyColorCode = self.bodyColors[color]
+        titleColorCode = self.titleColors[color]
+        self.updateStyleSheet(bodyColorCode)
+        self.noteManager.updateNoteColor(self._id, color)
+        self.m_titleBar.updateTitleColor(titleColorCode)
