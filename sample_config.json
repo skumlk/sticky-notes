@@ -1,5 +1,5 @@
 {"notes": [
-    {"height": 45, "x": 119, "text": "This is test text ho ho", "id": "587", "y": 34, "color": "purple", "width": 25}, 
-    {"height": 45, "x": 119, "text": "Second text", "id": "444", "y": 34, "color": "purple", "width": 25}
+    {"height": 250, "x": 119, "text": "This is test text ho ho", "id": "587", "y": 34, "color": "purple", "width": 250}, 
+    {"height": 250, "x": 119, "text": "Second text", "id": "444", "y": 34, "color": "purple", "width": 250}
     ]
 }

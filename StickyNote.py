@@ -3,59 +3,7 @@ from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtWidgets import QFrame
 from PyQt5 import QtCore
 from PyQt5.QtCore import Qt
-
-class TitleBar(QtWidgets.QDialog):
-    def __init__(self, parent=None):
-        QtWidgets.QDialog.__init__(self, parent)
-        self.parent = parent
-        self.setWindowFlags(Qt.FramelessWindowHint)
-        css = """
-        QWidget{
-            Background: #AA00AA;
-            color:white;
-            font:12px bold;
-            font-weight:bold;
-            border-radius: 1px;
-            height: 11px;
-        }
-        QDialog{
-            font-size:12px;
-            color: black;
-        }
-        QToolButton{
-            Background:#AA00AA;
-            font-size:11px;
-        }
-        QToolButton:hover{
-        }
-        """
-        self.setAutoFillBackground(True)
-        self.setBackgroundRole(QtGui.QPalette.Highlight)
-        self.setStyleSheet(css)
-        close=QtWidgets.QToolButton(self)
-        close.setIcon(QtGui.QIcon('img/close.png'))
-        close.setMinimumHeight(10)
-        hbox=QtWidgets.QHBoxLayout(self)
-        hbox.addWidget(close)
-        hbox.insertStretch(1,500)
-        hbox.setSpacing(0)
-        self.setSizePolicy(QtWidgets.QSizePolicy.Expanding,QtWidgets.QSizePolicy.Fixed)
-        self.maxNormal=False
-        close.clicked.connect(self.close)
-
-    def close(self):
-        self.parent.close()
-
-    def mousePressEvent(self,event):
-        if event.button() == Qt.LeftButton:
-            self.parent.moving = True
-            self.parent.offset = event.pos()
-
-    def mouseMoveEvent(self,event):
-        if self.parent.moving: 
-            newPosition = event.globalPos()-self.parent.offset
-            self.parent.move(newPosition)
-            self.parent.positionChanged(newPosition.x(), newPosition.y())
+from Titlebar import TitleBar
 
 class StickyNote(QtWidgets.QFrame):
     def __init__(self, _id, noteManager, parent=None):
@@ -119,3 +67,10 @@ class StickyNote(QtWidgets.QFrame):
 
     def setDimension(self, width, height):
         self.resize(width, height)
+
+    def closeNote(self):
+        self.close()
+        self.noteManager.deleteNote(self._id)
+
+    def createNewNote(self):
+        self.noteManager.createNewNote()

@@ -20,17 +20,19 @@ class Config:
 
         return []
 
-    def addNote(self, text, color, x, y, width, height):
-        self.data["notes"].append({
-            "id": uuid.uuid4(),
+    def createNewNote(self, x, y, color = "purple", width = 300, height = 250, text = ""):
+        note = {
+            "id": str(uuid.uuid4()),
             "width": width,
             "height": height,
             "x": x,
             "y": y,
             "text": text,
             "color": color
-        })
+        }
+        self.data["notes"].append(note)
         self._updateNote()
+        return note
 
     def getNote(self, id):
         e1 = [note for note in self.data["notes"] if note["id"] == id]
@@ -45,24 +47,29 @@ class Config:
             note["text"] = text
             self._updateNote()
 
-    def updateNotePosition(self, id, x, y):
-        note = self.getNote(id)
+    def updateNotePosition(self, _id, x, y):
+        note = self.getNote(_id)
         if note:
             note["x"] = x
             note["y"] = y
             self._updateNote()
 
-    def updateNoteDimension(self, id, width, height):
-        note = self.getNote(id)
+    def updateNoteDimension(self, _id, width, height):
+        note = self.getNote(_id)
         if note:
             note["width"] = width
             note["height"] = height
             self._updateNote()
 
-    def updateNoteColor(self, color):
-        note = self.getNote(id)
+    def updateNoteColor(self, _id, color):
+        note = self.getNote(_id)
         if note:
             note["color"] = color
             self._updateNote()
+
+    def deleteNote(self, _id):
+        notes = [note for note in self.data["notes"] if note["id"] != _id]
+        self.data["notes"] = notes
+        self._updateNote()
 
 config_instance = None#should initialize by main

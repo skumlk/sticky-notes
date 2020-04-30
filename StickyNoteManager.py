@@ -12,20 +12,23 @@ class StickyNoteManager:
         self.screenWidth = rec.width()
 
         for note in ConfigParser.config_instance.getNotes(): 
-            _id = note["id"]
-            width = note["width"]
-            height = note["height"]
-            stickyNote = self.createNote(_id)
-            stickyNote.setText(note["text"])
-            stickyNote.setPosition(note["x"], note["y"])
-            stickyNote.setDimension(width, height)
+           self.createNote(note)
 
-    def createNote(self, _id):
+    def createNote(self, note):
+        _id = note["id"]
+        width = note["width"]
+        height = note["height"]
         stickyNote = StickyNote(_id, self)
-        stickyNote.move(self.screenWidth - 300, 60*len(self.stickyNotes))
+        stickyNote.setText(note["text"])
+        stickyNote.setPosition(note["x"], note["y"])
+        stickyNote.setDimension(width, height)
         stickyNote.show()
         self.stickyNotes.append(stickyNote)
         return stickyNote
+
+    def createNewNote(self):
+        note = ConfigParser.config_instance.createNewNote(self.screenWidth - 300, 250)
+        self.createNote(note)
 
     def showAll(self):
         for frame in self.stickyNotes:
@@ -39,5 +42,9 @@ class StickyNoteManager:
 
     def updateNoteDimension(self, _id,  width, height):
         ConfigParser.config_instance.updateNoteDimension(_id, width, height)
+
+    def deleteNote(self, _id):
+        self.stickyNotes = [x for x in self.stickyNotes if x._id != _id]
+        ConfigParser.config_instance.deleteNote(_id)        
 
 sticky_note_manager_instance = None

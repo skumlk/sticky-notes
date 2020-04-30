@@ -24,7 +24,7 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
         StickyNoteManager.sticky_note_manager_instance.showAll()   
 
     def createNote(self):
-        StickyNoteManager.sticky_note_manager_instance.createNote()
+        StickyNoteManager.sticky_note_manager_instance.createNewNote()
 
     def exitAll(self):
         QtWidgets.QApplication.quit()
