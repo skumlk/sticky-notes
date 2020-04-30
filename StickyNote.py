@@ -1,6 +1,6 @@
 import sys
 from PyQt5 import QtWidgets, QtGui
-from PyQt5.QtWidgets import QFrame, QMenu
+from PyQt5.QtWidgets import QFrame, QMenu, QMessageBox
 from PyQt5 import QtCore
 from PyQt5.QtCore import Qt
 from Titlebar import TitleBar
@@ -132,8 +132,15 @@ class StickyNote(QtWidgets.QFrame):
         self.resize(width, height)
 
     def closeNote(self):
-        self.close()
-        self.noteManager.deleteNote(self._id)
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Information)
+        msg.setText("Do you want to delete note?")
+        msg.setWindowTitle("Sticky Note")
+        msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+        retval = msg.exec_()
+        if retval == QMessageBox.Ok:  # accepted
+            self.close()
+            self.noteManager.deleteNote(self._id)
 
     def createNewNote(self):
         self.noteManager.createNewNote(self._id)
