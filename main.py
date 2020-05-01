@@ -8,8 +8,12 @@ import ConfigParser
 from SystemTray import SystemTrayIcon
 import StickyNoteManager
 
+import qtmodern.styles
+import qtmodern.windows
+
 def main(image):
     app = QtWidgets.QApplication(sys.argv)
+    qtmodern.styles.dark(app)
     app.setQuitOnLastWindowClosed(False)
     w = QtWidgets.QWidget()
     trayIcon = SystemTrayIcon(QtGui.QIcon(image), w)

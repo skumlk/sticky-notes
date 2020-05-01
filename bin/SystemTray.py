@@ -6,6 +6,10 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QMainWindow, QFrame
 from StickyNote import StickyNote
 import StickyNoteManager
+from SettingsDialog import SettingsDialog
+import qtmodern.styles
+import qtmodern.windows
+
 
 class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
 
@@ -40,4 +44,10 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
         QtWidgets.QApplication.quit()
 
     def showSettings(self):
-        pass
+        dlg = SettingsDialog()
+        mw = qtmodern.windows.ModernWindow(dlg)
+        mw.show()
+        # if dlg.exec_():
+        #      print("Success!")
+        # else:
+        #      print("Cancel!")
