@@ -2,6 +2,8 @@
 import os
 import sys
 from PyQt5 import QtWidgets, QtGui
+
+sys.path.insert(1, './bin')
 import ConfigParser
 from SystemTray import SystemTrayIcon
 import StickyNoteManager
@@ -13,7 +15,7 @@ def main(image):
     trayIcon = SystemTrayIcon(QtGui.QIcon(image), w)
     trayIcon.show()
 
-    config_file = "config.json"
+    config_file = "config/config.json"
     ConfigParser.config_instance = ConfigParser.Config(config_file)
     StickyNoteManager.sticky_note_manager_instance = StickyNoteManager.StickyNoteManager()
 
