@@ -128,3 +128,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 config.json
+/venv
+StickyNotes.egg-info
+deb_dist
+*.tar.gz

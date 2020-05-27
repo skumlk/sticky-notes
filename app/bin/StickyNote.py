@@ -3,9 +3,9 @@ from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtWidgets import QFrame, QMenu, QMessageBox
 from PyQt5 import QtCore
 from PyQt5.QtCore import Qt
-from Titlebar import TitleBar
-import Const
-from StickyNoteEditor import StickyNoteEditor
+from app.bin.Titlebar import TitleBar
+import app.bin.Const
+from app.bin.StickyNoteEditor import StickyNoteEditor
 
 class StickyNote(QtWidgets.QFrame):
 
@@ -80,7 +80,7 @@ class StickyNote(QtWidgets.QFrame):
     def createNewNote(self):
         self.noteManager.createNewNote(self._id)
 
-    def updateStyleSheet(self, backgroundColor = Const.BODY_BACKGROUND_COLOR):
+    def updateStyleSheet(self, backgroundColor = app.bin.Const.BODY_BACKGROUND_COLOR):
         css = """
             QFrame{{
                 Background:  {0};

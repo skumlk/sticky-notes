@@ -3,7 +3,8 @@ from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtWidgets import QFrame
 from PyQt5 import QtCore
 from PyQt5.QtCore import Qt
-import Const
+import app.bin.Const
+import app.shared.util as util
 
 class TitleBar(QtWidgets.QDialog):
     def __init__(self, parent=None):
@@ -17,13 +18,13 @@ class TitleBar(QtWidgets.QDialog):
         hbox=QtWidgets.QHBoxLayout(self)
 
         btnCreateNewNote=QtWidgets.QToolButton(self)
-        btnCreateNewNote.setIcon(QtGui.QIcon('img/new.png'))
+        btnCreateNewNote.setIcon(util.createQIcon("app", 'img/new.png'))
         btnCreateNewNote.setMinimumHeight(10)
         btnCreateNewNote.clicked.connect(self.createNewNote)
         hbox.addWidget(btnCreateNewNote)
         
         btnClose=QtWidgets.QToolButton(self)
-        btnClose.setIcon(QtGui.QIcon('img/close.png'))
+        btnClose.setIcon(util.createQIcon("app", 'img/close.png'))
         btnClose.setMinimumHeight(10)
         btnClose.clicked.connect(self.close)
         hbox.addWidget(btnClose)
@@ -50,7 +51,7 @@ class TitleBar(QtWidgets.QDialog):
             self.parent.move(newPosition)
             self.parent.positionChanged(newPosition.x(), newPosition.y())
     
-    def updateCss(self, backgroundColor=Const.TITLE_BACKGROUND_COLOR):
+    def updateCss(self, backgroundColor=app.bin.Const.TITLE_BACKGROUND_COLOR):
         css = """
             QWidget{{
                 Background: {0};

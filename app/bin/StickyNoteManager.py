@@ -1,7 +1,7 @@
 
-from StickyNote import StickyNote
+from app.bin.StickyNote import StickyNote
 from PyQt5 import QtWidgets, QtCore, QtGui
-import ConfigParser
+import app.bin.ConfigParser as ConfigParser
 
 class StickyNoteManager:
 

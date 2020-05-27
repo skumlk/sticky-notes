@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=StickyNotes
+Comment=StickyNote App
+Exec=StickyNotes
+Icon=icon.png
+Categories=Utility;
+StartupNotify=true
+StartupWMClass=myscript

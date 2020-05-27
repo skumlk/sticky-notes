@@ -1,17 +1,41 @@
-
+import os
 import json
 import uuid
+import appdirs
+import errno
+
+AppName = "StickyNotes"
+AuthorName = "Samlk"
+CONFIG_FILE_NAME = "config.json"
 
 class Config:
     
-    def __init__(self, configFileName) :
-        self.configFileName = configFileName
-        with open(configFileName) as json_file:
+    def __init__(self) :
+        location = appdirs.user_data_dir(AppName, AuthorName)
+        self.configFileName = os.path.join(location, CONFIG_FILE_NAME)
+        if not os.path.exists(location):
+            try:
+                os.makedirs(location)
+            except OSError as exc: # Guard against race condition
+                if exc.errno != errno.EEXIST:
+                    raise
+
+        if not os.path.isfile(self.configFileName):
+            data = {"notes": []}
+            self._writeToConfig(data, True)
+
+        with open(self.configFileName, 'r') as json_file:
             self.data = json.load(json_file)
-    
+
+    def _writeToConfig(self, data, isCeateIfNotExist = False):
+        flag = "w"
+        if isCeateIfNotExist:
+            flag = "w+"
+        with open(self.configFileName, flag) as f:
+            json.dump(data, f)
+
     def _updateNote(self):
-        with open(self.configFileName, 'w') as f:
-            json.dump(self.data, f)
+        self._writeToConfig(self.data)
 
     def getNotes(self):
         notes = self.data["notes"]
