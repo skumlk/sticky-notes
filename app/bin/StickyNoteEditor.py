@@ -11,6 +11,7 @@ class StickyNoteEditor(QtWidgets.QTextEdit):
         super().__init__(parent=parent)
         self.parent = parent
 
+        self._setStyleSheet()
         boldAction = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+B"), self)
         boldAction.activated.connect(self.boldAction)
 
@@ -105,3 +106,31 @@ class StickyNoteEditor(QtWidgets.QTextEdit):
         currentFormat = self.currentCharFormat()
         currentFormat.setFontStrikeOut(not currentFormat.fontStrikeOut())
         self.setCurrentCharFormat(currentFormat)
+
+    def _setStyleSheet(self):
+
+        self.setStyleSheet("""
+            QScrollBar:vertical {
+                background: #F1F1F1;
+                width:15px;
+                margin: 0px 0px 0px 0px;
+            }
+            QScrollBar::handle:vertical {
+                background:#C0C0C0;
+                width:15px;
+                margin: 1px;
+            }
+            QScrollBar::handle:vertical:hover {
+                background:#A8A8A8;
+            }
+            QScrollBar::add-line:vertical {
+                background: #CE00CE;
+                subcontrol-position: bottom;
+                subcontrol-origin: margin;
+            }
+            QScrollBar::sub-line:vertical {
+                background: #CE00CE;
+                subcontrol-position: top;
+                subcontrol-origin: margin;
+            }
+        """)

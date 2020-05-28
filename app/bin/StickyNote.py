@@ -9,8 +9,8 @@ from app.bin.StickyNoteEditor import StickyNoteEditor
 
 class StickyNote(QtWidgets.QFrame):
 
-    bodyColors = {"purple": "#D700D7", "green": "#D4FC7A","yellow": "#FFE46E","pink": "#FF7BE3" }
-    titleColors = {"purple": "#AA00AA", "green": "#BFFB33","yellow": "#FFDB3B","pink": "#FF48D8" }
+    bodyColors = {"purple": "#eb00eb", "green": "#D4FC7A","yellow": "#FFE46E","pink": "#FF7BE3" }
+    titleColors = {"purple": "#D700D7", "green": "#BFFB33","yellow": "#FFDB3B","pink": "#FF48D8" }
 
     def __init__(self, _id, noteManager, parent=None):
         
@@ -84,7 +84,7 @@ class StickyNote(QtWidgets.QFrame):
         css = """
             QFrame{{
                 Background:  {0};
-                color:white;
+                color: black;
                 font:13px ;
                 font-weight:normal;
                 }}

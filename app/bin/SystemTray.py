@@ -31,6 +31,10 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
         hide_all_action.triggered.connect(self.hideAll)
         menu.aboutToShow.connect(self.action)
 
+
+    def on_context_menu(self, point):
+        print("xxxxx dddd")
+
     def action(self):
         StickyNoteManager.sticky_note_manager_instance.showAll()   
 
