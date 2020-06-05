@@ -2,6 +2,8 @@ from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QFrame, QMenu, QMessageBox
 
 import app.shared.util as util
+from PyQt5.Qt import QColor
+from PyQt5.QtGui import QTextCursor
 
 class StickyNoteEditor(QtWidgets.QTextEdit):
 
@@ -23,6 +25,15 @@ class StickyNoteEditor(QtWidgets.QTextEdit):
 
         unerlineAction = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+U"), self)
         unerlineAction.activated.connect(self.underlineAction)
+
+        redColor = QColor(255, 0, 0)
+        blackColor = QColor(0, 0, 0)
+
+        #self.setTextColor(QColor(255,0,0))
+
+        currentFormat = self.currentCharFormat()
+        currentFormat.setForeground(QColor(255,0 ,0))
+        self.setCurrentCharFormat(currentFormat)
 
     def isSelected(self):
         cursor = self.textCursor()
@@ -84,7 +95,7 @@ class StickyNoteEditor(QtWidgets.QTextEdit):
 
     def boldAction(self):
         currentFormat = self.currentCharFormat()
-        if currentFormat.fontWeight == 75:
+        if currentFormat.fontWeight() == 75:
             newWeight = 50
         else:
             newWeight = 75
@@ -134,3 +145,22 @@ class StickyNoteEditor(QtWidgets.QTextEdit):
                 subcontrol-origin: margin;
             }
         """)
+
+    def setColor(self, color : QColor):
+        currentFormat = self.currentCharFormat()
+        currentFormat.setForeground(color)
+        self.setCurrentCharFormat(currentFormat)
+
+    def setFontSize(self, fontSize):
+        currentFormat = self.currentCharFormat()
+        currentFormat.setFontPointSize(fontSize)
+        self.setCurrentCharFormat(currentFormat)
+
+    def setFontFamily(self, fontFamily):
+        currentFormat = self.currentCharFormat()
+        currentFormat.setFontFamily(fontFamily)
+        self.setCurrentCharFormat(currentFormat)
+
+    def setText(self, text):
+        super().setText(text)
+        self.moveCursor(QTextCursor.End)

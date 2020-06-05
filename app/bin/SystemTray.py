@@ -7,9 +7,9 @@ from PyQt5.QtWidgets import QMainWindow, QFrame
 from app.bin.StickyNote import StickyNote
 import app.bin.StickyNoteManager as StickyNoteManager
 from app.bin.SettingsDialog import SettingsDialog
+import app.bin.ConfigParser as ConfigParser
 import qtmodern.styles
 import qtmodern.windows
-
 
 class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
 
@@ -48,10 +48,7 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
         QtWidgets.QApplication.quit()
 
     def showSettings(self):
-        dlg = SettingsDialog()
+        settings = ConfigParser.config_instance.getSettings()
+        dlg = SettingsDialog(settings)
         mw = qtmodern.windows.ModernWindow(dlg)
-        mw.show()
-        # if dlg.exec_():
-        #      print("Success!")
-        # else:
-        #      print("Cancel!")
+        ret = mw.show()

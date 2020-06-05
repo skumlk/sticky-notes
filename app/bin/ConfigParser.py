@@ -4,9 +4,13 @@ import uuid
 import appdirs
 import errno
 
+from app.bin.Settings import Settings
+
 AppName = "StickyNotes"
 AuthorName = "Samlk"
 CONFIG_FILE_NAME = "config.json"
+
+INIT_CONFIG_DATA = {"notes": [],  "settings": {}}
 
 class Config:
     
@@ -21,8 +25,7 @@ class Config:
                     raise
 
         if not os.path.isfile(self.configFileName):
-            data = {"notes": []}
-            self._writeToConfig(data, True)
+            self._writeToConfig(INIT_CONFIG_DATA, True)
 
         with open(self.configFileName, 'r') as json_file:
             self.data = json.load(json_file)
@@ -96,4 +99,15 @@ class Config:
         self.data["notes"] = notes
         self._updateNote()
 
-config_instance = None#should initialize by main
+    def saveSettings(self, settings: Settings):
+        self.data["settings"] = settings.getJSON()
+        self._updateNote()
+
+    def getSettings(self):
+        settings = None
+        if("settings" in self.data):
+            settings = self.data["settings"]
+
+        return Settings(settings)
+    
+config_instance : Config = None#should initialize by main

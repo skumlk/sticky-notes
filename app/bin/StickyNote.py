@@ -6,6 +6,9 @@ from PyQt5.QtCore import Qt
 from app.bin.Titlebar import TitleBar
 import app.bin.Const
 from app.bin.StickyNoteEditor import StickyNoteEditor
+from PyQt5.Qt import QColor
+from app.bin import ConfigParser
+from app.bin.Settings import Settings
 
 class StickyNote(QtWidgets.QFrame):
 
@@ -97,3 +100,9 @@ class StickyNote(QtWidgets.QFrame):
         self.updateStyleSheet(bodyColorCode)
         self.noteManager.updateNoteColor(self._id, color)
         self.m_titleBar.updateTitleColor(titleColorCode)
+
+    def updateSettings(self):
+        settings:Settings = ConfigParser.config_instance.getSettings()
+        self.textEditor.setColor(settings.getFontColor())
+        self.textEditor.setFontSize(settings.getFontSize())
+        self.textEditor.setFontFamily(settings.getFontFamily())

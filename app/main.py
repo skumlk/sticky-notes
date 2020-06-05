@@ -13,6 +13,7 @@ import app.shared.util as util
 import qtmodern.styles
 import qtmodern.windows
 import os
+from qtpy import QtCore
 
 def main():
 
@@ -20,6 +21,7 @@ def main():
     app = QtWidgets.QApplication(sys.argv)
     qtmodern.styles.dark(app)
     app.setQuitOnLastWindowClosed(False)
+
     w = QtWidgets.QWidget()
     app.setWindowIcon(util.createQIcon(__name__, iconPath))
     trayIcon = SystemTrayIcon(util.createQIcon(__name__, iconPath), w)

@@ -2,6 +2,7 @@
 from app.bin.StickyNote import StickyNote
 from PyQt5 import QtWidgets, QtCore, QtGui
 import app.bin.ConfigParser as ConfigParser
+from PyQt5.Qt import QColor
 
 class StickyNoteManager:
 
@@ -22,6 +23,7 @@ class StickyNoteManager:
         stickyNote.setText(note["text"])
         stickyNote.setPosition(note["x"], note["y"])
         stickyNote.setDimension(width, height)
+        stickyNote.updateSettings()
         stickyNote.show()
         stickyNote.setColor(note["color"])
         self.stickyNotes.append(stickyNote)
@@ -67,5 +69,9 @@ class StickyNoteManager:
         for frame in self.stickyNotes:
             frame.hide()     
 
+    def updateSettings(self):
+        for stickyNote in self.stickyNotes:
+            stickyNote.updateSettings()
 
-sticky_note_manager_instance = None
+
+sticky_note_manager_instance: StickyNoteManager = None
