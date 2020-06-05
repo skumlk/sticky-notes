@@ -41,7 +41,8 @@ class StickyNote(QtWidgets.QFrame):
 
         l=QtWidgets.QVBoxLayout(self.contentWidget())
         l.setContentsMargins(0, 0, 0, 0)
-        self.textEditor=StickyNoteEditor(self)
+        settings:Settings = ConfigParser.config_instance.getSettings()
+        self.textEditor=StickyNoteEditor(settings, self)
         self.textEditor.setFrameStyle(QFrame.NoFrame)
         l.addWidget(self.textEditor)
         self.textEditor.textChanged.connect(self.signalTextChanged)
@@ -103,6 +104,7 @@ class StickyNote(QtWidgets.QFrame):
 
     def updateSettings(self):
         settings:Settings = ConfigParser.config_instance.getSettings()
-        self.textEditor.setColor(settings.getFontColor())
-        self.textEditor.setFontSize(settings.getFontSize())
-        self.textEditor.setFontFamily(settings.getFontFamily())
+        self.textEditor.setSettings(settings)
+        # self.textEditor.setColor(settings.getFontColor())
+        # self.textEditor.setFontSize(settings.getFontSize())
+        # self.textEditor.setFontFamily(settings.getFontFamily())
