@@ -5,9 +5,13 @@ from PyQt5 import QtCore
 from PyQt5.QtCore import Qt
 import app.bin.Const
 import app.shared.util as util
+from PyQt5.Qt import pyqtSignal
 
 class TitleBar(QtWidgets.QDialog):
-    def __init__(self, parent=None):
+
+    pinToTopChangeSignal = pyqtSignal(bool)
+
+    def __init__(self, parent=None, isPinToToggle = False):
         QtWidgets.QDialog.__init__(self, parent)
         self.parent = parent
         self.setWindowFlags(Qt.FramelessWindowHint)
@@ -22,6 +26,13 @@ class TitleBar(QtWidgets.QDialog):
         btnCreateNewNote.setMinimumHeight(10)
         btnCreateNewNote.clicked.connect(self.createNewNote)
         hbox.addWidget(btnCreateNewNote)
+
+        btnPinToggle=QtWidgets.QToolButton(self)
+        self.btnPinToggle = btnPinToggle
+        btnPinToggle.setMinimumHeight(10)
+        btnPinToggle.clicked.connect(self.actionPinToggle)
+        hbox.addWidget(btnPinToggle)
+        self.setPinToToggle(isPinToToggle)
         
         btnClose=QtWidgets.QToolButton(self)
         btnClose.setIcon(util.createQIcon("app", 'img/close.png'))
@@ -30,7 +41,7 @@ class TitleBar(QtWidgets.QDialog):
         hbox.addWidget(btnClose)
 
         hbox.insertStretch(1,500)
-        hbox.setSpacing(0)
+        hbox.setSpacing(8)
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding,QtWidgets.QSizePolicy.Fixed)
         self.maxNormal=False
 
@@ -39,6 +50,18 @@ class TitleBar(QtWidgets.QDialog):
 
     def createNewNote(self):
         self.parent.createNewNote()
+
+    def setPinToToggle(self, isPinToToggle):
+        self.isPinToToggle = isPinToToggle
+        iconPath = 'img/pin-off.png'
+        if self.isPinToToggle:
+            iconPath = "img/pin-on.png"
+
+        self.btnPinToggle.setIcon(util.createQIcon("app", iconPath))
+        self.pinToTopChangeSignal.emit(self.isPinToToggle)
+
+    def actionPinToggle(self):
+        self.setPinToToggle(not self.isPinToToggle)
 
     def mousePressEvent(self,event):
         if event.button() == Qt.LeftButton:

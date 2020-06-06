@@ -6,16 +6,20 @@ from PyQt5.QtCore import Qt
 from app.bin.Titlebar import TitleBar
 import app.bin.Const
 from app.bin.StickyNoteEditor import StickyNoteEditor
-from PyQt5.Qt import QColor
+from PyQt5.Qt import QColor, pyqtSignal
 from app.bin import ConfigParser
 from app.bin.Settings import Settings
+from app.bin.ConfigParser import ConfigNoteModel
 
 class StickyNote(QtWidgets.QFrame):
+
+    #pin to top, undo not working properly
+    reopenWindowSignal = pyqtSignal(str)
 
     bodyColors = {"purple": "#eb00eb", "green": "#D4FC7A","yellow": "#FFE46E","pink": "#FF7BE3" }
     titleColors = {"purple": "#D700D7", "green": "#BFFB33","yellow": "#FFDB3B","pink": "#FF48D8" }
 
-    def __init__(self, _id, noteManager, parent=None):
+    def __init__(self, _id, noteManager, configNote: ConfigNoteModel, parent=None):
         
         QtWidgets.QFrame.__init__(self, parent)
         
@@ -27,8 +31,10 @@ class StickyNote(QtWidgets.QFrame):
         self.updateStyleSheet()
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setMouseTracking(True)
-        self.m_titleBar= TitleBar(self)
-        self.m_content= QtWidgets.QWidget(self)
+
+        settings:Settings = ConfigParser.config_instance.getSettings()
+        self.m_titleBar = TitleBar(self, configNote.isPinToTop())
+        self.m_content = QtWidgets.QWidget(self)
         vbox=QtWidgets.QVBoxLayout(self)
         vbox.addWidget(self.m_titleBar)
         vbox.setContentsMargins(0, 0, 0, 0)
@@ -46,6 +52,28 @@ class StickyNote(QtWidgets.QFrame):
         self.textEditor.setFrameStyle(QFrame.NoFrame)
         l.addWidget(self.textEditor)
         self.textEditor.textChanged.connect(self.signalTextChanged)
+        self.m_titleBar.pinToTopChangeSignal.connect(self.actionPinToTopChange)
+
+        self.setText(configNote.getText())
+        self.setPosition(configNote.getX(), configNote.getY())
+        self.setDimension(configNote.getWidth(), configNote.getHeight())
+        self.setPinToTop(configNote.isPinToTop())
+
+    def setPinToTop(self, isPinToTop):
+        flag = self.windowFlags()
+        if isPinToTop:
+            flag |= Qt.WindowStaysOnTopHint
+            self.setWindowFlags(flag)
+            self.raise_()
+            self.show()
+            self.activateWindow()
+        elif bool(flag & QtCore.Qt.WindowStaysOnTopHint):#is flag set
+            self.close()
+            self.reopenWindowSignal.emit(self._id)
+
+    def actionPinToTopChange(self, isPinToTop):
+        ConfigParser.config_instance.updateNotePinToTop(self._id, isPinToTop)
+        self.setPinToTop(isPinToTop)
 
     def contentWidget(self):
         return self.m_content
@@ -105,6 +133,7 @@ class StickyNote(QtWidgets.QFrame):
     def updateSettings(self):
         settings:Settings = ConfigParser.config_instance.getSettings()
         self.textEditor.setSettings(settings)
+
         # self.textEditor.setColor(settings.getFontColor())
         # self.textEditor.setFontSize(settings.getFontSize())
         # self.textEditor.setFontFamily(settings.getFontFamily())

@@ -15,18 +15,14 @@ class StickyNoteManager:
         for note in ConfigParser.config_instance.getNotes(): 
            self.createNote(note)
 
-    def createNote(self, note):
-        _id = note["id"]
-        width = note["width"]
-        height = note["height"]
-        stickyNote = StickyNote(_id, self)
-        stickyNote.setText(note["text"])
-        stickyNote.setPosition(note["x"], note["y"])
-        stickyNote.setDimension(width, height)
+    def createNote(self, note: ConfigParser.ConfigNoteModel):
+        _id = note.getId()
+        stickyNote = StickyNote(_id, self, note)
         stickyNote.updateSettings()
         stickyNote.show()
-        stickyNote.setColor(note["color"])
+        stickyNote.setColor(note.getColor())
         self.stickyNotes.append(stickyNote)
+        stickyNote.reopenWindowSignal.connect(self.actionReopenStickyNote)
         return stickyNote
 
     def createNewNote(self, _id = None):
@@ -37,9 +33,9 @@ class StickyNoteManager:
 
         if _id:
             note = ConfigParser.config_instance.getNote(_id)
-            x = note["x"]
-            y = note["y"] + 100
-            color = note["color"]
+            x = note.getX()
+            y = note.getY() + 100
+            color = note.getColor()
 
         note = ConfigParser.config_instance.createNewNote(x, y, color)
         self.createNote(note)
@@ -73,5 +69,9 @@ class StickyNoteManager:
         for stickyNote in self.stickyNotes:
             stickyNote.updateSettings()
 
+    def actionReopenStickyNote(self, _id):
+        self.stickyNotes = [x for x in self.stickyNotes if x._id != _id]
+        note = ConfigParser.config_instance.getNote(_id)
+        self.createNote(note)
 
 sticky_note_manager_instance: StickyNoteManager = None

@@ -12,6 +12,49 @@ CONFIG_FILE_NAME = "config.json"
 
 INIT_CONFIG_DATA = {"notes": [],  "settings": {}}
 
+NOTE_IS_PIN_TO_TOP = "isPinToTop"
+NOTE_WIDTH = "width"
+NOTE_HEIGHT = "height"
+NOTE_TEXT = "text"
+NOTE_X = "x"
+NOTE_Y = "y"
+NOTE_COLOR = "color"
+NOTE_ID = "id"
+
+class ConfigNoteModel:
+
+    isPinToTopDefault = False
+
+    def __init__(self, jsonStruct):
+        self.jsonStruct = jsonStruct
+
+    def isPinToTop(self):
+        if NOTE_IS_PIN_TO_TOP in self.jsonStruct:
+            return self.jsonStruct[NOTE_IS_PIN_TO_TOP] == 1
+
+        return self.isPinToTopDefault
+
+    def getWidth(self):
+        return self.jsonStruct[NOTE_WIDTH]
+
+    def getHeight(self):
+        return self.jsonStruct[NOTE_HEIGHT]
+
+    def getText(self):
+        return self.jsonStruct[NOTE_TEXT]
+
+    def getX(self):
+        return self.jsonStruct[NOTE_X]
+
+    def getY(self):
+        return self.jsonStruct[NOTE_Y]
+
+    def getColor(self):
+        return self.jsonStruct[NOTE_COLOR]
+
+    def getId(self):
+        return self.jsonStruct[NOTE_ID]
+
 class Config:
     
     def __init__(self) :
@@ -43,25 +86,33 @@ class Config:
     def getNotes(self):
         notes = self.data["notes"]
         if notes:
-            return notes
+            return [ConfigNoteModel(x) for x in notes]
 
         return []
 
     def createNewNote(self, x, y, color = "purple", width = 300, height = 250, text = ""):
         note = {
-            "id": str(uuid.uuid4()),
-            "width": width,
-            "height": height,
-            "x": x,
-            "y": y,
-            "text": text,
-            "color": color
+            NOTE_ID: str(uuid.uuid4()),
+            NOTE_WIDTH: width,
+            NOTE_HEIGHT: height,
+            NOTE_X: x,
+            NOTE_Y: y,
+            NOTE_TEXT: text,
+            NOTE_COLOR: color,
+            NOTE_IS_PIN_TO_TOP: 0
         }
         self.data["notes"].append(note)
         self._updateNote()
-        return note
+        return ConfigNoteModel(note)
 
     def getNote(self, id):
+        note = self._getNote(id)
+        if note:
+            return ConfigNoteModel(note)
+
+        return None
+
+    def _getNote(self, id):
         e1 = [note for note in self.data["notes"] if note["id"] == id]
         if e1 and len(e1) > 0:
             return e1[0]
@@ -69,29 +120,38 @@ class Config:
         return None
 
     def updateNoteText(self, id, text):
-        note = self.getNote(id)
+        note = self._getNote(id)
         if note:
             note["text"] = text
             self._updateNote()
 
     def updateNotePosition(self, _id, x, y):
-        note = self.getNote(_id)
+        note = self._getNote(_id)
         if note:
             note["x"] = x
             note["y"] = y
             self._updateNote()
 
     def updateNoteDimension(self, _id, width, height):
-        note = self.getNote(_id)
+        note = self._getNote(_id)
         if note:
             note["width"] = width
             note["height"] = height
             self._updateNote()
 
     def updateNoteColor(self, _id, color):
-        note = self.getNote(_id)
+        note = self._getNote(_id)
         if note:
             note["color"] = color
+            self._updateNote()
+
+    def updateNotePinToTop(self, _id, isPinToTop):
+        note = self._getNote(_id)
+        if note:
+            pinToTop = 0
+            if isPinToTop:
+                pinToTop = 1
+            note[NOTE_IS_PIN_TO_TOP] = pinToTop
             self._updateNote()
 
     def deleteNote(self, _id):
