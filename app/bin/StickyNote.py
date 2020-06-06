@@ -100,6 +100,7 @@ class StickyNote(QtWidgets.QFrame):
 
     def closeNote(self):
         msg = QMessageBox()
+        msg.move(self.geometry().x(), self.geometry().y() + 50)
         msg.setIcon(QMessageBox.Information)
         msg.setText("Do you want to delete note?")
         msg.setWindowTitle("Sticky Note")
