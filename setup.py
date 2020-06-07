@@ -18,7 +18,8 @@ setup(
         'gui_scripts' : ['StickyNotes = app.main:main']
     },
     data_files = [
-        ('share/applications/', ['StickyNoteApp.desktop'])
+        ('share/applications/', ['StickyNoteApp.desktop']),
+        ('share/icons/hicolor/scalable/apps', ['icon.png']),#main icon
     ],
     classifiers=[
         "License :: OSI Approved :: BSD License",
