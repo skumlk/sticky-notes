@@ -170,4 +170,4 @@ class Config:
 
         return Settings(settings)
     
-config_instance : Config = None#should initialize by main
+config_instance = None#should initialize by main

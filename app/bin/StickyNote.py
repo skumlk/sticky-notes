@@ -32,7 +32,7 @@ class StickyNote(QtWidgets.QFrame):
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setMouseTracking(True)
 
-        settings:Settings = ConfigParser.config_instance.getSettings()
+        settings = ConfigParser.config_instance.getSettings()
         self.m_titleBar = TitleBar(self, configNote.isPinToTop())
         self.m_content = QtWidgets.QWidget(self)
         vbox=QtWidgets.QVBoxLayout(self)
@@ -47,7 +47,7 @@ class StickyNote(QtWidgets.QFrame):
 
         l=QtWidgets.QVBoxLayout(self.contentWidget())
         l.setContentsMargins(0, 0, 0, 0)
-        settings:Settings = ConfigParser.config_instance.getSettings()
+        settings = ConfigParser.config_instance.getSettings()
         self.textEditor=StickyNoteEditor(settings, self)
         self.textEditor.setFrameStyle(QFrame.NoFrame)
         l.addWidget(self.textEditor)
@@ -132,7 +132,7 @@ class StickyNote(QtWidgets.QFrame):
         self.m_titleBar.updateTitleColor(titleColorCode)
 
     def updateSettings(self):
-        settings:Settings = ConfigParser.config_instance.getSettings()
+        settings = ConfigParser.config_instance.getSettings()
         self.textEditor.setSettings(settings)
 
         # self.textEditor.setColor(settings.getFontColor())

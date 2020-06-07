@@ -7,6 +7,7 @@ sys.path.insert(0, '/var/www/personal/sticky-notes')
 
 import app.bin.ConfigParser as ConfigParser
 from app.bin.SystemTray import SystemTrayIcon
+from app.bin.MemoryCondition import MemoryCondition
 import app.bin.StickyNoteManager as StickyNoteManager
 import app.shared.util as util
 
@@ -15,8 +16,7 @@ import qtmodern.windows
 import os
 from qtpy import QtCore
 
-def main():
-
+def _app():
     iconPath = 'img/icon.png'
     app = QtWidgets.QApplication(sys.argv)
     qtmodern.styles.dark(app)
@@ -29,6 +29,14 @@ def main():
     ConfigParser.config_instance = ConfigParser.Config()
     StickyNoteManager.sticky_note_manager_instance = StickyNoteManager.StickyNoteManager()
     sys.exit(app.exec_())
+
+def main():
+    with MemoryCondition() as condition:
+        if condition:
+            _app()
+        else:
+            sys.exit(0)
+
 
 if __name__ == '__main__':
     main()

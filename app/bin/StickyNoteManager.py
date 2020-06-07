@@ -74,4 +74,4 @@ class StickyNoteManager:
         note = ConfigParser.config_instance.getNote(_id)
         self.createNote(note)
 
-sticky_note_manager_instance: StickyNoteManager = None
+sticky_note_manager_instance = None
