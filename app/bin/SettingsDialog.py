@@ -1,7 +1,7 @@
 
 from PyQt5.QtWidgets import QComboBox, QDialog, QDialogButtonBox, QFontComboBox, QFormLayout, QHBoxLayout, QLineEdit, QPushButton, QVBoxLayout
 from PyQt5.QtGui import QColor, QFont
-from PyQt5.Qt import QColorDialog, Qt
+from PyQt5.Qt import QCheckBox, QColorDialog, Qt
 from app.bin.Settings import Settings
 import app.bin.ConfigParser as ConfigParser
 import app.bin.StickyNoteManager as  StickyNoteManager
@@ -31,6 +31,11 @@ class SettingsDialog(QDialog):
         self.fontColorChanged(color)
         self.colorButton.clicked.connect(self.showColors)
         self.layout.addRow("Font Color", self.colorButton)
+
+        isAutoStartCheckBox = QCheckBox("Enable start on startup", self)
+        #self.layout.addRow("", isAutoStartCheckBox)
+        isAutoStartCheckBox.stateChanged.connect(self.actionEnableAutoStart)
+        isAutoStartCheckBox.setChecked(settings.getStartOnStartup())
 
         QBtn = QDialogButtonBox.Ok | QDialogButtonBox.Cancel
         self.buttonBox = QDialogButtonBox(QBtn)
@@ -68,3 +73,6 @@ class SettingsDialog(QDialog):
 
     def reject(self):
         self.done(0)
+
+    def actionEnableAutoStart(self, res):
+        self.settings.setStartOnStartup(bool(res))

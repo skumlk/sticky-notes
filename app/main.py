@@ -15,6 +15,8 @@ import qtmodern.styles
 import qtmodern.windows
 import os
 from qtpy import QtCore
+from PyQt5.Qt import QMainWindow
+from PyQt5.QtCore import Qt
 
 def _app():
     iconPath = 'img/icon.png'

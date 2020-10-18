@@ -29,7 +29,7 @@ class StickyNote(QtWidgets.QFrame):
         self.setFrameShape(QtWidgets.QFrame.StyledPanel)
        
         self.updateStyleSheet()
-        self.setWindowFlags(Qt.FramelessWindowHint)
+        self.setWindowFlags(Qt.FramelessWindowHint | Qt.SubWindow | Qt.Tool)
         self.setMouseTracking(True)
 
         settings = ConfigParser.config_instance.getSettings()
@@ -58,6 +58,14 @@ class StickyNote(QtWidgets.QFrame):
         self.setPosition(configNote.getX(), configNote.getY())
         self.setDimension(configNote.getWidth(), configNote.getHeight())
         self.setPinToTop(configNote.isPinToTop())
+        self.installEventFilter(self)
+
+    def eventFilter(self, object, event):
+        print(str(event.type()) + " " + str(QtCore.QEvent.FocusIn))
+        if event.type() == QtCore.QEvent.FocusIn:
+            print("Focused")
+
+        return False # passes this event to the child, i.e. does not block it from the child widgets
 
     def setPinToTop(self, isPinToTop):
         flag = self.windowFlags()

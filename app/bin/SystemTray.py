@@ -50,5 +50,6 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
     def showSettings(self):
         settings = ConfigParser.config_instance.getSettings()
         dlg = SettingsDialog(settings)
+        dlg.move(self.geometry().x(), self.geometry().y() + 50)
         mw = qtmodern.windows.ModernWindow(dlg)
         ret = mw.show()
