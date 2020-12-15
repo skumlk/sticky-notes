@@ -4,12 +4,13 @@ import os
 import sys
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QMainWindow, QFrame
-from app.bin.StickyNote import StickyNote
-import app.bin.StickyNoteManager as StickyNoteManager
-from app.bin.SettingsDialog import SettingsDialog
-import app.bin.ConfigParser as ConfigParser
-import qtmodern.styles
-import qtmodern.windows
+from bin.StickyNote import StickyNote
+import bin.StickyNoteManager as StickyNoteManager
+from bin.SettingsDialog import SettingsDialog
+import bin.ConfigParser as ConfigParser
+# import qtmodern.styles
+# import qtmodern.windows
+# import qtmodern
 
 class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
 
@@ -33,7 +34,7 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
 
 
     def on_context_menu(self, point):
-        print("xxxxx dddd")
+        pass
 
     def action(self):
         StickyNoteManager.sticky_note_manager_instance.showAll()   
@@ -51,5 +52,5 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
         settings = ConfigParser.config_instance.getSettings()
         dlg = SettingsDialog(settings)
         dlg.move(self.geometry().x(), self.geometry().y() + 50)
-        mw = qtmodern.windows.ModernWindow(dlg)
-        ret = mw.show()
+        # mw = qtmodern.windows.ModernWindow(dlg)
+        ret = dlg.show()

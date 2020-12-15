@@ -9,16 +9,16 @@ setup(
     description = "Sticky Notes",
     license = "BSD",
     url = "https://github.com/skumlk/sticky-notes",
-    packages=['app', 'app.bin', 'app.shared'],
+    packages=['skstickynotes', 'skstickynotes.bin', 'skstickynotes.shared'],
     include_package_data = True,
     package_data = {
-        '' : ['*.png'],
+        'skstickynotes.img' : ['skstickynotes/img/*.png'],
     },
     entry_points = {
-        'gui_scripts' : ['StickyNotes = app.main:main']
+        'gui_scripts' : ['StickyNotes = skstickynotes.main:main']
     },
     data_files = [
-        ('share/applications/', ['StickyNoteApp.desktop']),
+         ('share/applications/', ['StickyNoteApp.desktop']),
         ('share/icons/hicolor/scalable/apps', ['icon.png']),#main icon
     ],
     classifiers=[

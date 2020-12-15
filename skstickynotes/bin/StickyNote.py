@@ -3,13 +3,13 @@ from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtWidgets import QFrame, QMenu, QMessageBox
 from PyQt5 import QtCore
 from PyQt5.QtCore import Qt
-from app.bin.Titlebar import TitleBar
-import app.bin.Const
-from app.bin.StickyNoteEditor import StickyNoteEditor
+from bin.Titlebar import TitleBar
+import bin.Const
+from bin.StickyNoteEditor import StickyNoteEditor
 from PyQt5.Qt import QColor, pyqtSignal
-from app.bin import ConfigParser
-from app.bin.Settings import Settings
-from app.bin.ConfigParser import ConfigNoteModel
+from bin import ConfigParser
+from bin.Settings import Settings
+from bin.ConfigParser import ConfigNoteModel
 
 class StickyNote(QtWidgets.QFrame):
 
@@ -61,7 +61,7 @@ class StickyNote(QtWidgets.QFrame):
         self.installEventFilter(self)
 
     def eventFilter(self, object, event):
-        print(str(event.type()) + " " + str(QtCore.QEvent.FocusIn))
+        # print(str(event.type()) + " " + str(QtCore.QEvent.FocusIn))
         if event.type() == QtCore.QEvent.FocusIn:
             print("Focused")
 
@@ -121,7 +121,7 @@ class StickyNote(QtWidgets.QFrame):
     def createNewNote(self):
         self.noteManager.createNewNote(self._id)
 
-    def updateStyleSheet(self, backgroundColor = app.bin.Const.BODY_BACKGROUND_COLOR):
+    def updateStyleSheet(self, backgroundColor = bin.Const.BODY_BACKGROUND_COLOR):
         css = """
             QFrame{{
                 Background:  {0};

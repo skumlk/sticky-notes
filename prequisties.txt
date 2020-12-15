@@ -1,0 +1,2 @@
+sudo apt-get install debhelper
+apt-get install python3-stdeb fakeroot python3-all

@@ -1,10 +1,10 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QFrame, QMenu, QMessageBox
 
-import app.shared.util as util
+import shared.util as util
 from PyQt5.Qt import QColor
 from PyQt5.QtGui import QTextCursor
-from app.bin.Settings import Settings
+from bin.Settings import Settings
 
 class StickyNoteEditor(QtWidgets.QTextEdit):
 
@@ -74,7 +74,7 @@ class StickyNoteEditor(QtWidgets.QTextEdit):
         contextMenu.addSeparator()
 
         for color in self.color_list:
-            contextMenu.addAction(util.createQIcon("app", 'img/{0}.png'.format(color)), color.title())
+            contextMenu.addAction(util.createQIcon("skstickynotes", 'img/{0}.png'.format(color)), color.title())
 
         action = contextMenu.exec_(self.mapToGlobal(event.pos()))
         if action:

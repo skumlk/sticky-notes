@@ -4,7 +4,7 @@ import uuid
 import appdirs
 import errno
 
-from app.bin.Settings import Settings
+from bin.Settings import Settings
 
 AppName = "StickyNotes"
 AuthorName = "Samlk"

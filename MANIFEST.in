@@ -1,2 +1,2 @@
-global-include *.png
+recursive-include skstickynotes/img *
 include icon.png

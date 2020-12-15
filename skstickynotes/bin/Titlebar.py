@@ -3,8 +3,8 @@ from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtWidgets import QFrame
 from PyQt5 import QtCore
 from PyQt5.QtCore import Qt
-import app.bin.Const
-import app.shared.util as util
+import bin.Const
+import shared.util as util
 from PyQt5.Qt import pyqtSignal
 
 class TitleBar(QtWidgets.QDialog):
@@ -22,7 +22,7 @@ class TitleBar(QtWidgets.QDialog):
         hbox=QtWidgets.QHBoxLayout(self)
 
         btnCreateNewNote=QtWidgets.QToolButton(self)
-        btnCreateNewNote.setIcon(util.createQIcon("app", 'img/new.png'))
+        btnCreateNewNote.setIcon(util.createQIcon(__name__, '../img/new.png'))
         btnCreateNewNote.setMinimumHeight(10)
         btnCreateNewNote.clicked.connect(self.createNewNote)
         hbox.addWidget(btnCreateNewNote)
@@ -35,7 +35,7 @@ class TitleBar(QtWidgets.QDialog):
         self.setPinToToggle(isPinToToggle)
         
         btnClose=QtWidgets.QToolButton(self)
-        btnClose.setIcon(util.createQIcon("app", 'img/close.png'))
+        btnClose.setIcon(util.createQIcon(__name__, '../img/close.png'))
         btnClose.setMinimumHeight(10)
         btnClose.clicked.connect(self.close)
         hbox.addWidget(btnClose)
@@ -53,11 +53,11 @@ class TitleBar(QtWidgets.QDialog):
 
     def setPinToToggle(self, isPinToToggle):
         self.isPinToToggle = isPinToToggle
-        iconPath = 'img/pin-off.png'
+        iconPath = '../img/pin-off.png'
         if self.isPinToToggle:
-            iconPath = "img/pin-on.png"
+            iconPath = "../img/pin-on.png"
 
-        self.btnPinToggle.setIcon(util.createQIcon("app", iconPath))
+        self.btnPinToggle.setIcon(util.createQIcon(__name__, iconPath))
         self.pinToTopChangeSignal.emit(self.isPinToToggle)
 
     def actionPinToggle(self):
@@ -74,7 +74,7 @@ class TitleBar(QtWidgets.QDialog):
             self.parent.move(newPosition)
             self.parent.positionChanged(newPosition.x(), newPosition.y())
     
-    def updateCss(self, backgroundColor=app.bin.Const.TITLE_BACKGROUND_COLOR):
+    def updateCss(self, backgroundColor=bin.Const.TITLE_BACKGROUND_COLOR):
         css = """
             QWidget{{
                 Background: {0};

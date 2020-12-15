@@ -2,9 +2,9 @@
 from PyQt5.QtWidgets import QComboBox, QDialog, QDialogButtonBox, QFontComboBox, QFormLayout, QHBoxLayout, QLineEdit, QPushButton, QVBoxLayout
 from PyQt5.QtGui import QColor, QFont
 from PyQt5.Qt import QCheckBox, QColorDialog, Qt
-from app.bin.Settings import Settings
-import app.bin.ConfigParser as ConfigParser
-import app.bin.StickyNoteManager as  StickyNoteManager
+from bin.Settings import Settings
+import bin.ConfigParser as ConfigParser
+import bin.StickyNoteManager as  StickyNoteManager
 
 class SettingsDialog(QDialog):
 
