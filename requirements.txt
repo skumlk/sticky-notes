@@ -11,4 +11,4 @@ qtmodern==0.2.0
 QtPy==1.9.0
 simplenote==2.1.4
 stdeb==0.9.1
-zipp==3.1.0
+zipp==3.19.1
